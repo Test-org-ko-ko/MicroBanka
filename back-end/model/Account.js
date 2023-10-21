@@ -21,7 +21,7 @@ class Account {
     generateAccountNumber() {
         // 20231020xxxx
         const today = new Date();
-        const prefix = today.getFullYear() + '' + today.getMonth() + '' + today.getDay();
+        const prefix = today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
         return prefix + 
             Math.floor(Math.random() * (9999 - 1000) + 1000);
     }
