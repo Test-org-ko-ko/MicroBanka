@@ -47,7 +47,12 @@
           </div>
           <div class="col-md-6">
             <label for="securityqn" class="form-label">Security Question</label>
-            <input type="text" class="form-control" id="securityQtn" name="securityQtn">
+            <select required class="form-control" id="securityQtn" name="securityQtn">
+              <option value="">Select Security Question</option>
+              <option value="movie">What is your favourite movie?</option>
+              <option value="pet">What is your first pet?</option>
+            </select>
+            <small class="form-text text-muted">Select Security Question</small>
           </div>
           <div class="col-md-6">
             <label for="securityans" class="form-label">Security Answer</label>
@@ -59,9 +64,13 @@
           </div>
           <div class="col-md-6">
             <label for="accountType" class="form-label">Account Type</label>
-            <input type="text" class="form-control" id="accountType" name="accountType">
+            <select required class="form-control" id="accountType" name="accountType">
+              <option value="">Select Account Type</option>
+              <option value="checking">Checking</option>
+              <option value="saving">Saving</option>
+            </select>
           </div>
-        <div class="col-12">
+      <div class="col-12">
           <button type="button" class="btn btn-primary" id="btnRegister">Register</button>
         </div>
     </form>

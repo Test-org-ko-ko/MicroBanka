@@ -40,27 +40,28 @@ async function submitAction(userData) {
     console.log('registeration ends..');
     document.getElementById('backToHomePage').click();
 }
-
+    
 document.getElementById('btnRegister').addEventListener('click', () => {
-    const addressData = document.getElementsByName('address');
-    let address = [];
-    addressData.forEach(data => { 
-        console.log(data);
-        address.push(data.value);
-    });
-    address = address.join(', ');
+        const addressData = document.getElementsByName('address');
+        let address = [];
+        addressData.forEach(data => { 
+            console.log(data);
+            address.push(data.value);
+        });
+        address = address.join(', ');
 
-    const obj = {
-        name : document.getElementById('name').value,
-        email : document.getElementById('email').value,
-        password : document.getElementById('password').value,
-        address: address,
-        phone : document.getElementById('phone').value,
-        ssn : document.getElementById('ssn').value,
-        securityAns : document.getElementById('securityAns').value,
-        securityQtn : document.getElementById('securityQtn').value,
-        initialDeposit : document.getElementById('initialDeposit').value,
-        accountType : document.getElementById('accountType').value
-    }
-    submitAction(obj);
+        const obj = {
+            name : document.getElementById('name').value,
+            email : document.getElementById('email').value,
+            password : document.getElementById('password').value,
+            address: address,
+            phone : document.getElementById('phone').value,
+            ssn : document.getElementById('ssn').value,
+            securityAns : document.getElementById('securityAns').value,
+            securityQtn : document.getElementById('securityQtn').value,
+            initialDeposit : document.getElementById('initialDeposit').value,
+            accountType : document.getElementById('accountType').value
+        }
+        submitAction(obj);
 });
+

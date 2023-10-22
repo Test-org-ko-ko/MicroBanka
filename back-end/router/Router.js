@@ -11,6 +11,9 @@ router.get('/register', homeController.register);
 router.post('/account', express.urlencoded({ extended: true }) ,
     acctController.createAccount);
 
+router.post('/login/:username/:password', express.urlencoded({ extended: true }) ,
+    userController.getAuthenticatedUser);
+
 router.get('/users', userController.getAllUsers)
 
 

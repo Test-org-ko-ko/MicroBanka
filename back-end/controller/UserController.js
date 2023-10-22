@@ -27,6 +27,19 @@ const controller = {
     },
     getAllUsers: function (req, res, next) {
         res.status(200).json(User.getAll());
+    },
+    getAuthenticatedUser: function (req, res, next) {
+        console.log(req.params);
+        if (req.params) {
+            const { username,password} = req.params;
+            console.log(username,password);
+            let authenticatedUser = User.getAll().find(data => data.name.toLowerCase() === username.toLowerCase() && data.password === password);
+            if(authenticatedUser){
+                res.status(200).json(authenticatedUser);
+                return;
+            }
+        }
+        res.status(400).json({ message: "Invalid request. user authentication is invalid."});
     }
 };
 
