@@ -1,5 +1,4 @@
 window.onload = () => {
-    console.log(document.getElementById('btnTransfer'));
     
 }
 document.getElementById('btnTransfer').addEventListener('click', () => {

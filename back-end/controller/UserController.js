@@ -15,11 +15,13 @@ const controller = {
                 currentUser.email = email;
                 currentUser.address = address;
                 currentUser.phone = phone;
-                currentUser.securityQtn = securityQtn;
-                currentUser.securityAns = securityAns;
-                
-                // response
-
+                //currentUser.securityQtn = securityQtn;
+                //currentUser.securityAns = securityAns;
+                let existingUser = User.getAll().find(data=>data.id === currentUser.id);
+                existingUser.email = currentUser.email;
+                existingUser.address = currentUser.address;
+                existingUser.phone = currentUser.phone;
+                res.status(200).json(currentUser);
                 return;
             }
         }
@@ -35,6 +37,7 @@ const controller = {
             console.log(username,password);
             let authenticatedUser = User.getAll().find(data => data.name.toLowerCase() === username.toLowerCase() && data.password === password);
             if(authenticatedUser){
+                currentUser = authenticatedUser;
                 res.status(200).json(authenticatedUser);
                 return;
             }
@@ -43,7 +46,22 @@ const controller = {
     },
     getCurrentUser: function (req, res, next) {
         res.status(200).json(currentUser); 
-    }
+    },
+    // getAuthenticatedUserAccount: function(req,res,next){
+    //     console.log(req.params);
+    //     if(req.params){
+    //         const {accountNumber} = req.params;
+    //         console.log(accountNumber);
+    //         //use this account to retrieve transactions and user info and add into userAccount obj
+    //         let userAccount = {
+    //             name: "",
+    //             accountNumber :"",
+    //             transactions : []
+    //         };
+    //         currentUser = getAuthenticatedUser();
+    //         console.log(currentUser);  
+    //     }
+    // }
 };
 
 module.exports = controller;

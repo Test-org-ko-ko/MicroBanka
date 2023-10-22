@@ -70,14 +70,11 @@ const acctController = {
         res.status(400).json({ message: 'failed' });
     },
     withdraw: function (req, res, next) {
-        if (req.body) {
-            const { fromAcctNumber, amount} = req.body;
-            if (fromAcctNumber && amount) {
-                const fromAcc = findAccountByAccountNumber(fromAcctNumber);
-                if (!fromAcc){
-                    return;
-                }
-                withdrawFromATM(amount, fromAcc);
+        if (req.params) {
+            const amount = req.params.amount;
+            console.log(amount);
+            if (amount) {
+                withdrawFromATM(amount, currentUserAccount);
                 res.status(200).json({ message: 'success' });
                 return;
             }
@@ -96,7 +93,8 @@ const acctController = {
         if (currentUserAccount) {
             res.status(200).json(currentUserAccount);
         }
-    }
+    },
+    
 }
 
 function findAccountByAccountNumber(number) {
@@ -133,7 +131,14 @@ function withdrawFromATM(amount, from) {
         return;
     }
     from.balance -= amount;
-    from.createTransaction(amount, TransactionType.ATM_DEBIT, null, null);
+    console.log(from.balance);
+    Account.createTransaction.call(from, amount, TransactionType.ATM_DEBIT, from.accountNumber, null);
+    User.getAll().forEach(user => {
+        if (user.activeAccounts[0].accountNumber === from.accountNumber) {
+            user.activeAccounts[0].balance = from.balance;
+            user.activeAccounts[0].transactions = from.transactions;
+        }
+    })
 }
 
 {/* <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script> */}

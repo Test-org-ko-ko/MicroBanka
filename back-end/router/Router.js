@@ -25,5 +25,10 @@ router.get('/currentaccount', acctController.getCurrentAccount);
 
 router.get('/findaccount/:accountNumber', acctController.findAccount);
 
+router.put('/updateprofile',express.urlencoded({ extended: true }), userController.updateProfileDetails);
+router.post('/withdraw/:amount',acctController.withdraw);
+
+//router.get('/getAuthenticatedUserAccount/:accountNumber',acctController.getAuthenticatedUserAccount);
+
 
 module.exports = router;
