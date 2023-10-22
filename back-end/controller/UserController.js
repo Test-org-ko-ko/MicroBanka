@@ -40,6 +40,9 @@ const controller = {
             }
         }
         res.status(400).json({ message: "Invalid request. user authentication is invalid."});
+    },
+    getCurrentUser: function (req, res, next) {
+        res.status(200).json(currentUser); 
     }
 };
 

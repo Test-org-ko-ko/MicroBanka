@@ -1,7 +1,12 @@
 const {v4: uuid} = require('uuid');
 const Transaction = require('./Transaction');
 
-let Accounts = [];
+let Accounts = [
+    {"accountNumber":"202310214275","accountType":"checking","balance": 500,"transactions":[{"id":"19d98067-6376-4369-8f89-7123e93990aa","date":1697935591368,"amount":"500","type":"CREDIT","from":null,"to":"202310214275"}]},
+    {"accountNumber":"202310214200","accountType":"checking","balance": 500,"transactions":[{"id":"19d98067-6376-4369-8f89-7123e93990bb","date":1697935591368,"amount":"500","type":"CREDIT","from":null,"to":"202310214200"}]}
+
+
+];
 
 const TransactionType = {
     CREDIT: 'CREDIT',
@@ -27,11 +32,11 @@ class Account {
     }
 
     makeInitialTransaction(initialDeposit) {
-        this.createTransaction(initialDeposit, TransactionType.CREDIT, null, this.accountNumber);
+        Account.createTransaction(initialDeposit, TransactionType.CREDIT, null, this.accountNumber);
         Accounts.push(this);
     }
 
-    createTransaction(amount, transactionType, fromAcctNumber, 
+    static createTransaction(amount, transactionType, fromAcctNumber, 
             toAcctNumber) {
 
         this.transactions.push(
@@ -44,12 +49,12 @@ class Account {
                 toAcctNumber
             )
         );
+        console.log(this.transactions);
     }
 
     static getAllAccounts() {
         return Accounts;
     }
-
 
 }
 

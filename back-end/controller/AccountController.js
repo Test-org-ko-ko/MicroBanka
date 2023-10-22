@@ -4,19 +4,28 @@ const path = require('path');
 
 let currentUserAccount;
 
+const TransactionType = {
+    CREDIT: 'CREDIT',
+    DEBIT: 'DEBIT',
+    ATM_DEBIT: 'ATM_DEBIT'
+};
+
 const acctController = {
     findAccount: function (req, res, next) {
+        console.log('finding acc');
         if (req.params) {
             if (!req.params.accountNumber) {
+                console.log('acc num is ' + req.params.accountNumber);
                 res.status(404).json({ message: 'Account No. is empty.' });
                 return;
             }
             const acc = findAccountByAccountNumber(req.params.accountNumber);
             if (!acc) {
-                currentUserAccount = acc;
                 res.status(404).json({ message: 'Account with account number ' + req.params.accountNumber + ' does not exist.'});
                 return;
             }
+            currentUserAccount = acc;
+            console.log('setting currentacc ' + currentUserAccount);
             res.status(200).json(acc);
             return;
         }
@@ -31,7 +40,7 @@ const acctController = {
             securityQtn && securityAns && initialDeposit && accountType) {
 
                 const user = new User(name, email, password, address, phone, ssn, 
-                    securityQtn, securityAns, initialDeposit, accountType);
+                    securityQtn, securityAns, Number(initialDeposit), accountType);
                     if(user){
                         res.status(200).json(user);
                         return;
@@ -41,14 +50,18 @@ const acctController = {
         res.status(400).json({ message: "Invalid request. Provide User data to create account."});
     },
     transfer: function (req, res, next) {
+        console.log('trnsfer acct controller');
         if (req.body) {
+            console.log('...');
             const { fromAcctNumber, toAcctNumber, amount} = req.body;
+            console.log(fromAcctNumber, toAcctNumber, amount);
             if (fromAcctNumber && toAcctNumber && amount) {
                 const fromAcc = findAccountByAccountNumber(fromAcctNumber);
                 const toAcc = findAccountByAccountNumber(toAcctNumber);
                 if (!fromAcc || !toAcc){
                     return;
                 }
+                console.log('create transactionss..');
                 transfer(amount, fromAcc, toAcc);
                 res.status(200).json({ message: 'success' });
                 return;
@@ -77,6 +90,12 @@ const acctController = {
             // getelementbyId and fill up the data
             const transactions = currentUserAccount.transactions;
         }
+    },
+    getCurrentAccount: function (req, res, next) {
+        console.log('current acc in acc controller ', currentUserAccount);
+        if (currentUserAccount) {
+            res.status(200).json(currentUserAccount);
+        }
     }
 }
 
@@ -85,13 +104,28 @@ function findAccountByAccountNumber(number) {
 }
 
 function transfer(amount, from, to) {
+    console.log(amount, from, to);
     if (amount <= 0 || amount > from.balance) {
         return;
     }
+    console.log('before ',from.balance);
+
     from.balance -= amount;
+    console.log('after ',from.balance);
     to.balance += amount;
-    to.createTransaction(amount, TransactionType.CREDIT, from.accountNumber, null);
-    from.createTransaction(amount, TransactionType.DEBIT, null, to.accountNumber);
+    Account.createTransaction.call(from, amount, TransactionType.CREDIT, from.accountNumber, to.accountNumber);
+    Account.createTransaction.call(to, amount, TransactionType.DEBIT, from.accountNumber, to.accountNumber);
+    
+    User.getAll().forEach(user => {
+        if (user.activeAccounts[0].accountNumber === from.accountNumber) {
+            user.activeAccounts[0].balance = from.balance;
+            user.activeAccounts[0].transactions = from.transactions;
+        }
+        else if (user.activeAccounts[0].accountNumber === to.accountNumber) {
+            user.activeAccounts[0].balance = to.balance;
+            user.activeAccounts[0].transactions = to.transactions;
+        }
+    })
 };
 
 function withdrawFromATM(amount, from) {
