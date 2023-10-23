@@ -17,6 +17,7 @@ const TransactionType = {
 class Account {
     constructor(accountType, deposit) {
         this.accountNumber = this.generateAccountNumber();
+        console.log(this.accountNumber);
         this.accountType = accountType;
         this.balance = deposit;
         this.transactions = [];
@@ -32,17 +33,19 @@ class Account {
     }
 
     makeInitialTransaction(initialDeposit) {
-        Account.createTransaction(initialDeposit, TransactionType.CREDIT, null, this.accountNumber);
+        Account.createTransaction.call(this,Number(initialDeposit), TransactionType.CREDIT, null, this.accountNumber);
         Accounts.push(this);
     }
 
     static createTransaction(amount, transactionType, fromAcctNumber, 
             toAcctNumber) {
+        const today = new Date();
+        const transDate= today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
 
-        this.transactions.push(
+        return this.transactions.push(
             new Transaction(
                 uuid(),
-                Date.now(),
+                transDate,
                 amount,
                 transactionType,
                 fromAcctNumber,

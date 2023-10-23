@@ -5,6 +5,9 @@ document.getElementById('btnLogin').addEventListener('click', async () => {
     await loginAction(name,password);
     
 });
+document.getElementById('btnSignup').addEventListener('click', () => {
+    window.location.href = 'register.html';
+});
 
 async function loginAction(username,password) {
     const setting = {

@@ -6,25 +6,33 @@
     <title>MicroBanka</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="../css/frontend.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <form>  
-        <div class="form-group">    
-            <label for="username">Username</label>    
-            <input type="text" class="form-control" id="username"  placeholder="Enter username">    
-        </div>  
-        <div class="form-group">    
-            <label for="password">Password</label>    
-            <input type="password" class="form-control" id="password" placeholder="Enter password">  
-        </div>   
-        <button type="button" class="btn btn-primary" id="btnLogin">Login</button>
-    </form>
+    <div class="homecontainer">
+        <h2>Login to MicroBanka</h2>
+        <form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password">
+            </div>
+            <button type="button" class="btn btn-primary btn-login" id="btnLogin">Login</button>
+            <button type="button" id="btnSignup" class="btn btn-success btn-signup">Sign Up</button>
+            <button type="button" class="btn btn-warning btn-forgot-password">Forgot Password</button>
+        </form>
+    </div>
     <a href="./landingpage.html" style="display: none;" id="landingpage"></a>
-    <a href="./register.html">Register</a>
-    <br><br>
-    <a href="./transfer.html">Transfer</a>
-    <br><br>
-    <button type="button" class="btn btn-primary">Primary</button>
+    <!-- <div class="text-center">
+        <a href="./register.html">Create an Account</a>
+    </div>
+    <br> -->
+    <!-- <div class="text-center">
+        <a href="./transfer.html">Transfer Money</a>
+    </div> -->
     <script src="../js/Index.js"></script>
 </body>
 </html>

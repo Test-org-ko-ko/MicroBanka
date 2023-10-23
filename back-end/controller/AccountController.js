@@ -35,12 +35,14 @@ const acctController = {
         if (req.body) {
             const { name, email, password, address, phone, ssn, 
                 securityQtn, securityAns, initialDeposit, accountType } = req.body;
-
+            console.log(name,email,password,address, phone, ssn, 
+                securityQtn, securityAns, initialDeposit, accountType);
             if (name && email && password && address && phone && ssn &&
             securityQtn && securityAns && initialDeposit && accountType) {
 
                 const user = new User(name, email, password, address, phone, ssn, 
                     securityQtn, securityAns, Number(initialDeposit), accountType);
+                    console.log(user);
                     if(user){
                         res.status(200).json(user);
                         return;

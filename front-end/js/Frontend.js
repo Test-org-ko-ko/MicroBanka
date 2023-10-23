@@ -38,9 +38,9 @@ async function submitAction(userData) {
     }
 
     console.log('registeration ends..');
-    document.getElementById('backToHomePage').click();
+    //document.getElementById('backToHomePage').click();
 }
-    
+
 document.getElementById('btnRegister').addEventListener('click', () => {
         const addressData = document.getElementsByName('address');
         let address = [];

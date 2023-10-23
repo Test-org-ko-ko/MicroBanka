@@ -23,7 +23,9 @@ class User {
     }
 
     createAccount(accountType, deposit) {
+        console.log(accountType, deposit);
         const account = new Account(accountType, deposit);
+        console.log(account);
         this.activeAccounts.push(account);
         Users.push(this);
     }
