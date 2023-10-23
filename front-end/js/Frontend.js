@@ -1,5 +1,4 @@
 window.onload = () => {
-
 }
 
 async function submitAction(userData) {
@@ -24,7 +23,10 @@ async function submitAction(userData) {
     const setting = {
         method: 'POST',
         body: JSON.stringify(userData),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + localStorage.getItem('token') 
+        }
     };
 
     const response = await fetch('http://localhost:3000/account', setting);
@@ -42,26 +44,26 @@ async function submitAction(userData) {
 }
 
 document.getElementById('btnRegister').addEventListener('click', () => {
-        const addressData = document.getElementsByName('address');
-        let address = [];
-        addressData.forEach(data => { 
-            console.log(data);
-            address.push(data.value);
-        });
-        address = address.join(', ');
+    const addressData = document.getElementsByName('address');
+    let address = [];
+    addressData.forEach(data => { 
+        console.log(data);
+        address.push(data.value);
+    });
+    address = address.join(', ');
 
-        const obj = {
-            name : document.getElementById('name').value,
-            email : document.getElementById('email').value,
-            password : document.getElementById('password').value,
-            address: address,
-            phone : document.getElementById('phone').value,
-            ssn : document.getElementById('ssn').value,
-            securityAns : document.getElementById('securityAns').value,
-            securityQtn : document.getElementById('securityQtn').value,
-            initialDeposit : document.getElementById('initialDeposit').value,
-            accountType : document.getElementById('accountType').value
-        }
-        submitAction(obj);
+    const obj = {
+        name : document.getElementById('name').value,
+        email : document.getElementById('email').value,
+        password : document.getElementById('password').value,
+        address: address,
+        phone : document.getElementById('phone').value,
+        ssn : document.getElementById('ssn').value,
+        securityAns : document.getElementById('securityAns').value,
+        securityQtn : document.getElementById('securityQtn').value,
+        initialDeposit : document.getElementById('initialDeposit').value,
+        accountType : document.getElementById('accountType').value
+    }
+    submitAction(obj);
 });
 

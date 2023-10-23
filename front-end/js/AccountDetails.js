@@ -1,29 +1,34 @@
 window.onload =  () => {
-     let userAccount = checkAccountDetails();
+    checkAccountDetails();
 }
 
 async function checkAccountDetails(){
     let fromUserAccount;
-    const responseFromAcc =  await fetch('http://localhost:3000/currentaccount', { method: 'GET'});
+    let setting = {
+        method: 'GET',
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    }
+    const responseFromAcc =  await fetch('http://localhost:3000/currentaccount', setting);
     console.log(responseFromAcc);
     if (responseFromAcc.ok) {
         fromUserAccount = await responseFromAcc.json();
         console.log(fromUserAccount);
+        document.getElementById('accountnumber').value = fromUserAccount.accountNumber;
+        document.getElementById('balance').value = fromUserAccount.balance;
+        document.getElementById('type').value = fromUserAccount.accountType;
+        displayAccountQRCode(fromUserAccount.accountNumber);
     }
     else {
         console.log('current account retrieval failed.');
     }
-    document.getElementById('accountnumber').value=fromUserAccount.accountNumber;
-    document.getElementById('balance').value=fromUserAccount.balance;
-    document.getElementById('type').value=fromUserAccount.accountType;
-    return fromUserAccount;
+
     for(let e of fromUserAccount.transactions){
         addRowToTable(e.id, e.date, e.from, e.to, e.type, e.amount);
     }
 }
 
 
-function addRowToTable(id, date, from, to, type, balance) {
+function addRowToTable(id) {
     let row = document.createElement('tr');
     row.setAttribute("id", id);
     for (let e of arguments) {
@@ -32,7 +37,6 @@ function addRowToTable(id, date, from, to, type, balance) {
         row.appendChild(cell);
     }
     document.getElementById('tbodyTransactionsList').appendChild(row);
-
 }
 
 document.getElementById('btnSave').addEventListener("click", () =>{
@@ -57,7 +61,10 @@ async function updateProfileDetails(updateData){
     const setting = {
         method: 'PUT',
         body: JSON.stringify(updateData),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + localStorage.getItem('token') 
+        }
     };
     const response =  await fetch('http://localhost:3000/updateprofile', setting);
     if(response.ok){
@@ -67,7 +74,11 @@ async function updateProfileDetails(updateData){
     }
 }
 async function withdrawMoney(amount){
-    const response =  await fetch('http://localhost:3000/withdraw/' + amount, {method:'POST'});
+    const response =  await fetch('http://localhost:3000/withdraw/' + amount, 
+    {
+        method:'POST', 
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
     if(response.ok){
         let msg = await response.json();
         alert(msg.message);
@@ -163,3 +174,15 @@ async function transferAction(receipient, amount) {
 //     // Save the PDF
 //     doc.save('account_details.pdf');
 // });
+
+
+function displayAccountQRCode(accountNumber) {
+    new QRCode(document.getElementById("qrDiv"), {
+        text: accountNumber,
+        width: 128,
+        height: 128,
+        colorDark : "#5868bf",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+}

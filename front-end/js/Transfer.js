@@ -13,7 +13,11 @@ document.getElementById('btnTransfer').addEventListener('click', () => {
 async function transferAction(receipient, amount) {
     console.log('transfer Action starts..');
     let fromUserAccount;
-    const responseFromAcc = await fetch('http://localhost:3000/currentaccount', { method: 'GET'});
+    const responseFromAcc = await fetch('http://localhost:3000/currentaccount', 
+    { 
+        method: 'GET',
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
     if (responseFromAcc.ok) {
         fromUserAccount = await responseFromAcc.json();
         console.log(fromUserAccount);
@@ -30,7 +34,10 @@ async function transferAction(receipient, amount) {
     const setting = {
         method: 'POST',
         body: JSON.stringify(obj),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
     };
 
     const response = await fetch('http://localhost:3000/transfer', setting);

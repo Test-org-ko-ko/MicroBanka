@@ -15,7 +15,6 @@ const acctController = {
         console.log('finding acc');
         if (req.params) {
             if (!req.params.accountNumber) {
-                console.log('acc num is ' + req.params.accountNumber);
                 res.status(404).json({ message: 'Account No. is empty.' });
                 return;
             }
@@ -117,13 +116,13 @@ function transfer(amount, from, to) {
     Account.createTransaction.call(to, amount, TransactionType.DEBIT, from.accountNumber, to.accountNumber);
     
     User.getAll().forEach(user => {
-        if (user.activeAccounts[0].accountNumber === from.accountNumber) {
-            user.activeAccounts[0].balance = from.balance;
-            user.activeAccounts[0].transactions = from.transactions;
+        if (user.account.accountNumber === from.accountNumber) {
+            user.account.balance = from.balance;
+            user.account.transactions = from.transactions;
         }
-        else if (user.activeAccounts[0].accountNumber === to.accountNumber) {
-            user.activeAccounts[0].balance = to.balance;
-            user.activeAccounts[0].transactions = to.transactions;
+        else if (user.account.accountNumber === to.accountNumber) {
+            user.account.balance = to.balance;
+            user.account.transactions = to.transactions;
         }
     })
 };
@@ -136,22 +135,11 @@ function withdrawFromATM(amount, from) {
     console.log(from.balance);
     Account.createTransaction.call(from, amount, TransactionType.ATM_DEBIT, from.accountNumber, null);
     User.getAll().forEach(user => {
-        if (user.activeAccounts[0].accountNumber === from.accountNumber) {
-            user.activeAccounts[0].balance = from.balance;
-            user.activeAccounts[0].transactions = from.transactions;
+        if (user.account.accountNumber === from.accountNumber) {
+            user.account.balance = from.balance;
+            user.account.transactions = from.transactions;
         }
     })
 }
-
-{/* <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script> */}
-
-// new QRCode(document.getElementById("qrcode"), {
-//     text: "https://webisora.com",
-//     width: 128,
-//     height: 128,
-//     colorDark : "#5868bf",
-//     colorLight : "#ffffff",
-//     correctLevel : QRCode.CorrectLevel.H
-// });
 
 module.exports = acctController;
