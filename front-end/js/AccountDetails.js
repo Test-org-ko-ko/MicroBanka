@@ -1,22 +1,30 @@
 window.onload =  () => {
-     checkAccountDetails();
+    checkAccountDetails();
 }
 
+const key = '9403-a874137fe85a';
 async function checkAccountDetails(){
-    console.log('abc');
     let fromUserAccount;
-    const responseFromAcc =  await fetch('http://localhost:3000/currentaccount', { method: 'GET'});
+    let setting = {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + key
+        }
+    }
+    const responseFromAcc =  await fetch('http://localhost:3000/currentaccount', setting);
     console.log(responseFromAcc);
     if (responseFromAcc.ok) {
         fromUserAccount = await responseFromAcc.json();
         console.log(fromUserAccount);
+        document.getElementById('accountnumber').value = fromUserAccount.accountNumber;
+        document.getElementById('balance').value = fromUserAccount.balance;
+        document.getElementById('type').value = fromUserAccount.accountType;
+        displayAccountQRCode(fromUserAccount.accountNumber);
     }
     else {
         console.log('current account retrieval failed.');
     }
-    document.getElementById('accountnumber').value=fromUserAccount.accountNumber;
-    document.getElementById('balance').value=fromUserAccount.balance;
-    document.getElementById('type').value=fromUserAccount.accountType;
+
 
     for(let e of fromUserAccount.transactions){
         addRowToTable(e.id, e.date, e.from, e.to, e.type, e.amount);
@@ -77,3 +85,14 @@ document.getElementById('btnWithdrawSave').addEventListener("click",() =>{
     const amount = document.getElementById("amount").value;
     withdrawMoney(amount);
 });
+
+function displayAccountQRCode(accountNumber) {
+    new QRCode(document.getElementById("qrDiv"), {
+        text: accountNumber,
+        width: 128,
+        height: 128,
+        colorDark : "#5868bf",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+}

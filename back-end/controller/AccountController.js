@@ -141,15 +141,4 @@ function withdrawFromATM(amount, from) {
     })
 }
 
-{/* <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script> */}
-
-// new QRCode(document.getElementById("qrcode"), {
-//     text: "https://webisora.com",
-//     width: 128,
-//     height: 128,
-//     colorDark : "#5868bf",
-//     colorLight : "#ffffff",
-//     correctLevel : QRCode.CorrectLevel.H
-// });
-
 module.exports = acctController;

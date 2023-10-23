@@ -28,6 +28,7 @@ const controller = {
         res.status(400).json({ message: "Invalid request. Provide User data to update detail."});
     },
     getAllUsers: function (req, res, next) {
+
         res.status(200).json(User.getAll());
     },
     getAuthenticatedUser: function (req, res, next) {
