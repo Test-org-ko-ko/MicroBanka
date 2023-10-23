@@ -32,7 +32,7 @@ class Account {
     }
 
     makeInitialTransaction(initialDeposit) {
-        Account.createTransaction(initialDeposit, TransactionType.CREDIT, null, this.accountNumber);
+        Account.createTransaction.call(this, initialDeposit, TransactionType.CREDIT, null, this.accountNumber);
         Accounts.push(this);
     }
 

@@ -2,14 +2,11 @@ window.onload =  () => {
     checkAccountDetails();
 }
 
-const key = '9403-a874137fe85a';
 async function checkAccountDetails(){
     let fromUserAccount;
     let setting = {
         method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + key
-        }
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     }
     const responseFromAcc =  await fetch('http://localhost:3000/currentaccount', setting);
     console.log(responseFromAcc);
@@ -25,13 +22,12 @@ async function checkAccountDetails(){
         console.log('current account retrieval failed.');
     }
 
-
     for(let e of fromUserAccount.transactions){
         addRowToTable(e.id, e.date, e.from, e.to, e.type, e.amount);
     }
 }
 
-function addRowToTable(id, date, from, to, type, balance) {
+function addRowToTable(id) {
     let row = document.createElement('tr');
     row.setAttribute("id", id);
     for (let e of arguments) {
@@ -40,7 +36,6 @@ function addRowToTable(id, date, from, to, type, balance) {
         row.appendChild(cell);
     }
     document.getElementById('tbodyTransactionsList').appendChild(row);
-
 }
 
 document.getElementById('btnSave').addEventListener("click", () =>{
@@ -65,7 +60,10 @@ async function updateProfileDetails(updateData){
     const setting = {
         method: 'PUT',
         body: JSON.stringify(updateData),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + localStorage.getItem('token') 
+        }
     };
     const response =  await fetch('http://localhost:3000/updateprofile', setting);
     if(response.ok){
@@ -75,7 +73,11 @@ async function updateProfileDetails(updateData){
     }
 }
 async function withdrawMoney(amount){
-    const response =  await fetch('http://localhost:3000/withdraw/' + amount, {method:'POST'});
+    const response =  await fetch('http://localhost:3000/withdraw/' + amount, 
+    {
+        method:'POST', 
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
     if(response.ok){
         let msg = await response.json();
         alert(msg.message);

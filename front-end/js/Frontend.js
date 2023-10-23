@@ -1,5 +1,4 @@
 window.onload = () => {
-
 }
 
 async function submitAction(userData) {
@@ -24,7 +23,10 @@ async function submitAction(userData) {
     const setting = {
         method: 'POST',
         body: JSON.stringify(userData),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + localStorage.getItem('token') 
+        }
     };
 
     const response = await fetch('http://localhost:3000/account', setting);

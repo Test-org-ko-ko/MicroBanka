@@ -13,20 +13,13 @@ app.use(cors());
 app.use(express.static('./resource'));
 
 app.use('/', (req, res, next) => {
-    console.log(req);
-    console.log('token...', req.headers.authorization);
-    let bearer;
+    console.log('in auth middleware');
     if (req.headers && req.headers.authorization) {
-        bearer = req.headers.authorization.split(' ')[1];
-        console.log(bearer, ' === ', key);
-        if (bearer === key)
-            next();
-        else
-            res.status(401).json({ message: 'Unauthroized, Token: ' + bearer });
+        console.log('has token', req.headers.authorization);
+        next();
     }
-    else {
-        res.status(401).json({ message: 'Empty Auth' });
-    }
+    else
+        res.status(401).json({ message: 'Token missing' });
 });
 
 app.use('/', router);
