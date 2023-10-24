@@ -2,8 +2,8 @@ const {v4: uuid} = require('uuid');
 const Transaction = require('./Transaction');
 
 let Accounts = [
-    {"accountNumber":"202310214275","accountType":"checking","balance": 500,"transactions":[{"id":"19d98067-6376-4369-8f89-7123e93990aa","date":"2023/10/21","amount":"500","type":"CREDIT","from":null,"to":"202310214275"}]},
-    {"accountNumber":"202310214200","accountType":"checking","balance": 500,"transactions":[{"id":"19d98067-6376-4369-8f89-7123e93990bb","date":"2023/10/21","amount":"500","type":"CREDIT","from":null,"to":"202310214200"}]}
+    {"accountNumber":"202310214275","accountType":"checking","balance": 500,"transactions":[{"id":"19d98067-6376-4369-8f89-7123e93990aa","date":1697935591368,"amount":"500","type":"CREDIT","from":null,"to":"202310214275"}]},
+    {"accountNumber":"202310214200","accountType":"checking","balance": 500,"transactions":[{"id":"19d98067-6376-4369-8f89-7123e93990bb","date":1697935591368,"amount":"500","type":"CREDIT","from":null,"to":"202310214200"}]}
 
 
 ];
@@ -40,7 +40,7 @@ class Account {
     static createTransaction(amount, transactionType, fromAcctNumber, 
             toAcctNumber) {
         const today = new Date();
-        const transDate= today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+        const transDate= today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate();
 
         return this.transactions.push(
             new Transaction(
