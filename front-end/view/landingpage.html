@@ -10,143 +10,141 @@
     <link rel="stylesheet" href="../css/landing.css">
 </head>
 <body>
-    <div class="container">
-    <h3>User Account Information Details</h3>
-    <form>
-        <div id="userData">
-            <div class="mb-3">
-                <label for="accountnumber" class="form-label">Account Number</label>
-                <input type="text" class="form-control" id="accountnumber" disabled>
-            </div>
-            <div class="mb-3">
-                <label for="balance" class="form-label">Balance</label>
-                <input type="text" class="form-control" id="balance" disabled>
-            </div>
-            <div class="mb-3">
-                <label for="type" class="form-label">Account Type</label>
-                <input type="text" class="form-control" id="type" disabled>
-            </div>
+    <div class="container mt-4">
+      <h3>User Account Information Details</h3>
+      <div id="userData">
+        <div class="mb-3">
+            <label for="accountnumber" class="form-label">Account Number</label>
+            <input type="text" class="form-control" id="accountnumber" disabled>
         </div>
-        <div id="qrDiv">
+        <div class="mb-3">
+            <label for="balance" class="form-label">Balance</label>
+            <input type="text" class="form-control" id="balance" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Account Type</label>
+            <input type="text" class="form-control" id="type" disabled>
+        </div>
+      </div>
+    <div id="qrDiv">
 
-        </div>
-        <div class="mt-4">
-            <table class="table table-striped" id="myTable">
-                <thead>
-                    <tr>
-                        <th scope="col">Transaction ID</th>
-                        <th scope="col">Transaction Date</th>
-                        <th scope="col">From Account</th>
-                        <th scope="col">To Account</th>
-                        <th scope="col">Transaction Type</th>
-                        <th scope="col">Balance</th>
-                    </tr>
-                </thead>
-                <tbody id="tbodyTransactionsList"></tbody>
-            </table>
-        </div>
-        <div>
-            <button type="button" class="btn btn-primary" id="btnTransfer" data-bs-toggle="modal" data-bs-target="#transferModal" data-bs-whatever="@mdo">Transfer</button>
-            <button type="button" class="btn btn-primary" id="btnUpdate" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@mdo">Update</button>
-            <button type="button" class="btn btn-primary" id="btnWithdraw" data-bs-toggle="modal" data-bs-target="#withdrawDialog" data-bs-whatever="@mdo">Withdraw</button>
-        </div>
-        <!--Transfer Modal-->
-        <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="transferModalLabel">Transfer</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="mt-4">
+        <table class="table table-striped" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Transaction ID</th>
+                    <th scope="col">Transaction Date</th>
+                    <th scope="col">From Account</th>
+                    <th scope="col">To Account</th>
+                    <th scope="col">Transaction Type</th>
+                    <th scope="col">Balance</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyTransactionsList"></tbody>
+        </table>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" id="btnTransfer" data-bs-toggle="modal" data-bs-target="#transferModal" data-bs-whatever="@mdo">Transfer</button>
+        <button type="button" class="btn btn-primary" id="btnUpdate" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@mdo">Update</button>
+        <button type="button" class="btn btn-primary" id="btnWithdraw" data-bs-toggle="modal" data-bs-target="#withdrawDialog" data-bs-whatever="@mdo">Withdraw</button>
+        <button type="button" class="btn btn-primary" id="btnLogout">Logout</button>
+      </div>
+    <!--Transfer Modal-->
+    <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="transferModalLabel">Transfer</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">    
+                    <label for="receipient">Receipient Account Number</label>    
+                    <input type="number" class="form-control" id="receipient">    
+                </div>  
+                <div class="mb-3">
+                  <label for="transferamount" class="col-form-label">Amount</label>
+                  <input type="text" class="form-control" id="transferamount">
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">    
-                        <label for="receipient">Receipient Account Number</label>    
-                        <input type="number" class="form-control" id="receipient">    
-                    </div>  
-                    <div class="mb-3">
-                      <label for="transferamount" class="col-form-label">Amount</label>
-                      <input type="text" class="form-control" id="transferamount">
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="btnTransferSave">Save</button>
-                </div>
-              </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="btnTransferSave">Save</button>
             </div>
           </div>
+        </div>
+      </div>
 
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Update Contact Details</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Update Contact Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="email" class="col-form-label">Email</label>
+                  <input type="email" class="form-control" id="email">
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="mb-3">
-                      <label for="email" class="col-form-label">Email</label>
-                      <input type="email" class="form-control" id="email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="col-form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone">
-                      </div>
-                    <div class="mb-3">
-                        <label for="inputAddress" class="form-label">Street</label>
-                        <input type="text" class="form-control" id="inputAddress" name="address">
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputCity" class="form-label">City</label>
-                        <input type="text" class="form-control" id="inputCity" name="address">
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputPostalCode" class="form-label">Postal Code</label>
-                        <input type="text" class="form-control" id="inputPostalCode" name="address">
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputState" class="form-label">State</label>
-                        <input type="text" class="form-control" id="inputState" name="address">
-                    </div>
-                  </form>
+                <div class="mb-3">
+                    <label for="phone" class="col-form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone">
+                  </div>
+                <div class="mb-3">
+                    <label for="inputAddress" class="form-label">Street</label>
+                    <input type="text" class="form-control" id="inputAddress" name="address">
                 </div>
-                <div class="modal-footer">
-                  <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                <div class="mb-3">
+                    <label for="inputCity" class="form-label">City</label>
+                    <input type="text" class="form-control" id="inputCity" name="address">
                 </div>
-              </div>
+                <div class="mb-3">
+                    <label for="inputPostalCode" class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" id="inputPostalCode" name="address">
+                </div>
+                <div class="mb-3">
+                    <label for="inputState" class="form-label">State</label>
+                    <input type="text" class="form-control" id="inputState" name="address">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="btnSave">Save</button>
             </div>
           </div>
-          <!--withdraw dialog-->
-          <div class="modal fade" id="withdrawDialog" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="withdrawModalLabel">Withdraw</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <!--withdraw dialog-->
+      <div class="modal fade" id="withdrawDialog" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="withdrawModalLabel">Withdraw</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="amount" class="col-form-label">Amount</label>
+                  <input type="amount" class="form-control" id="amount">
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="mb-3">
-                      <label for="amount" class="col-form-label">Amount</label>
-                      <input type="amount" class="form-control" id="amount">
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" id="transferclose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="btnWithdrawSave">Save</button>
-                </div>
-              </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="transferclose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="btnWithdrawSave">Save</button>
             </div>
           </div>
-      </form>
-    
-</div>
-<!-- <a href="./transfer.html">Transfer</a> -->
-<script src="../js/AccountDetails.js"></script>
+        </div>
+      </div>
+  </div>
+  <a href="./home.html" id="backToHome" style="display: none;"></a>
+  <script src="../js/AccountDetails.js"></script>
 </body>
 </html>
