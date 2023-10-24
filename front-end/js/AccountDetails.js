@@ -95,6 +95,7 @@ async function withdrawMoney(amount){
     else {
         let msg = await response.json();
         alert(msg.message);
+        // test
     }
 }
 document.getElementById('btnWithdrawSave').addEventListener("click",() =>{
