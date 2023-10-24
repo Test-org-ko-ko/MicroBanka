@@ -25,22 +25,20 @@ async function submitAction(userData) {
         body: JSON.stringify(userData),
         headers: { 
             'Content-Type': 'application/json', 
-            'Authorization': 'Bearer ' + localStorage.getItem('token') 
+            'Authorization': 'Bearer register' 
         }
     };
 
     const response = await fetch('http://localhost:3000/account', setting);
     if (response.ok) {
-        const userCreated = await response.json();
-        console.log('created ', userCreated);
-        alert(userCreated);
+        const { message } = await response.json();
+        alert(message);
     }
     else {
         alert('Registration failed, ' + response.status);
     }
-
     console.log('registeration ends..');
-    //document.getElementById('backToHomePage').click();
+    document.getElementById('backToHomePage').click();
 }
 
 document.getElementById('btnRegister').addEventListener('click', () => {

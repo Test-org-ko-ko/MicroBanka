@@ -32,6 +32,10 @@ class User {
     static getAll() {
         return Users;
     }
+
+    static deleteUserAccount(acct){
+        Users = Users.filter(data=> data.id !== acct);
+    }
 }
 
 module.exports = User;

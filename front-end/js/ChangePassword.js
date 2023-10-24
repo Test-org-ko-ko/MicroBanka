@@ -4,9 +4,12 @@ window.onload = () => {
 document.getElementById('changePasswordBtn').addEventListener('click', () => {
     const password = document.getElementById('pw1').value;
     const passwordConfirmed = document.getElementById('pw2').value;
-    if (password || 
-        passwordConfirmed ||
+    console.log(password, passwordConfirmed);
+    console.log(typeof password, typeof passwordConfirmed);
+    if (!password || 
+        !passwordConfirmed ||
         password !== passwordConfirmed) {
+            console.log(password, passwordConfirmed);
             alert('Please confirm your passwords');
             return;
     }
@@ -25,12 +28,14 @@ document.getElementById('changePasswordBtn').addEventListener('click', () => {
     changePassword(obj);
 });
 
-const key = '9403-a874137fe85a';
 async function changePassword(obj) {
     const setting = {
         method: 'POST',
         body: JSON.stringify(obj),
-        headers: { 'Authorization': 'Bearer changepassword' }
+        headers: { 
+            'Authorization': 'Bearer changepassword',
+            'Content-Type': 'application/json'
+        }
     };
     const response = await fetch('http://localhost:3000/changepassword', setting);
     if (response.ok) {
@@ -39,7 +44,8 @@ async function changePassword(obj) {
         document.getElementById('backToHomePage').click();
     }
     else {
-        alert('Password change failed, ' + response.status);
+        const { message } = await response.json();
+        alert(message, ': ' + response.status);
     }
 }
 

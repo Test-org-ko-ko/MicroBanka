@@ -15,7 +15,7 @@ document.getElementById('btnSignup').addEventListener('click', () => {
     window.location.href = 'register.html';
 });
 
-document.getElementById('btnChangePassword').addEventListener('click', () => {
+document.getElementById('changepassword').addEventListener('click', () => {
     window.location.href = 'changepassword.html';
 });
 
@@ -43,13 +43,9 @@ async function loginAction(username, password) {
             }
         }
     }
-    else {
-        alert('Authentication failed, ' + response.status);
+    else {  
         const { message } = await response.json();
-        if ('Token missing' === message) {
-            alert(message, response.status);
-            console.log(message, response.status);
-        }
+        alert(message);
     }
 }
 
@@ -66,4 +62,6 @@ function validateIfEmpty() {
     return true;
 }
 
-//test
+document.getElementById('changepassword').addEventListener('click', () => {
+    window.location.href = 'changepassword.html';
+});

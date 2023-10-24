@@ -84,3 +84,9 @@ h2 {
     padding-right: 20px;
     width: 220px;
 }
+
+.passwordcontainer{
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}

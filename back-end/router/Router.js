@@ -31,6 +31,8 @@ router.post('/withdraw/:amount',acctController.withdraw);
 
 router.post('/changepassword', userController.changePassword);
 
+router.delete('/delete/:id', userController.deleteUserAccount);
+
 //router.get('/getAuthenticatedUserAccount/:accountNumber',acctController.getAuthenticatedUserAccount);
 
 

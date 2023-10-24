@@ -43,7 +43,7 @@ const acctController = {
                     securityQtn, securityAns, Number(initialDeposit), accountType);
                     console.log(user);
                     if(user){
-                        res.status(200).json(user);
+                        res.status(200).json({ message: 'New user created successfully.'});
                         return;
                     }
             }
