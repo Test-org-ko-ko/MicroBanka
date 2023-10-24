@@ -64,6 +64,18 @@ document.getElementById('btnRegister').addEventListener('click', () => {
         initialDeposit : document.getElementById('initialDeposit').value,
         accountType : document.getElementById('accountType').value
     }
+
+    if (!validateIfEmpty(obj)) {
+        alert('All fields are required to register your account.');
+        return;
+    }
     submitAction(obj);
 });
 
+function validateIfEmpty(obj) {
+    if (obj) {
+        for (let data of Object.values(obj))
+            if (!data) return false;
+    }
+    return true;
+}

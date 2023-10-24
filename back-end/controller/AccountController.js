@@ -53,17 +53,30 @@ const acctController = {
     transfer: function (req, res, next) {
         console.log('trnsfer acct controller');
         if (req.body) {
-            console.log('...');
-            const { fromAcctNumber, toAcctNumber, amount} = req.body;
-            console.log(fromAcctNumber, toAcctNumber, amount);
-            if (fromAcctNumber && toAcctNumber && amount) {
+            const { fromAcctNumber, toAcctNumber, amount, amountToDebit } = req.body;
+            console.log(fromAcctNumber, toAcctNumber, amount, amountToDebit);
+            if (fromAcctNumber === toAcctNumber) {
+                res.status(400).json({ message: 'Receipient must not be your account number.' });
+                return;
+            }
+            const pontentialRecipient = Account.getAllAccounts().find(acc => acc.accountNumber === toAcctNumber);
+            if (!pontentialRecipient) {
+                res.status(404).json({ message: 'Receipient account does not exist.' });
+                return;
+            }
+
+            if (fromAcctNumber && toAcctNumber && amount && amountToDebit) {
                 const fromAcc = findAccountByAccountNumber(fromAcctNumber);
                 const toAcc = findAccountByAccountNumber(toAcctNumber);
                 if (!fromAcc || !toAcc){
                     return;
                 }
                 console.log('create transactionss..');
-                transfer(amount, fromAcc, toAcc);
+                const msg = transfer(amount, fromAcc, amountToDebit, toAcc);
+                if (msg) {
+                    res.status(400).json({ message: msg });
+                    return; 
+                }
                 res.status(200).json({ message: 'success' });
                 return;
             }
@@ -75,7 +88,11 @@ const acctController = {
             const amount = req.params.amount;
             console.log(amount);
             if (amount) {
-                withdrawFromATM(amount, currentUserAccount);
+                const result = withdrawFromATM(amount, currentUserAccount);
+                if (result) {
+                    res.status(400).json({ message: result });
+                    return;
+                }
                 res.status(200).json({ message: 'success' });
                 return;
             }
@@ -104,17 +121,21 @@ function findAccountByAccountNumber(number) {
     return Account.getAllAccounts().find(acc => acc.accountNumber === number);
 }
 
+<<<<<<< HEAD
 function transfer(amount, from, to) {
+=======
+function transfer(amount, from, amountToDebit, to) {
+    console.log(amount, from, to, amountToDebit);
+>>>>>>> 002409c716a1701f361db23e9f9fcb7b49edbfd1
     if (amount <= 0 || amount > from.balance) {
-        return;
+        return 'Amount: ' + amount + ' is not allowed to make a transfer.';
     }
     console.log('before ',from.balance);
-
     from.balance -= amount;
     console.log('after ',from.balance);
-    to.balance += amount;
+    to.balance += amountToDebit;
     Account.createTransaction.call(from, amount, TransactionType.CREDIT, from.accountNumber, to.accountNumber);
-    Account.createTransaction.call(to, amount, TransactionType.DEBIT, from.accountNumber, to.accountNumber);
+    Account.createTransaction.call(to, amountToDebit, TransactionType.DEBIT, from.accountNumber, to.accountNumber);
     
     User.getAll().forEach(user => {
         if (user.account.accountNumber === from.accountNumber) {
@@ -125,12 +146,14 @@ function transfer(amount, from, to) {
             user.account.balance = to.balance;
             user.account.transactions = to.transactions;
         }
-    })
+    });
+
+    return null;
 };
 
 function withdrawFromATM(amount, from) {
     if (amount <= 0 || amount > from.balance) {
-        return;
+        return 'Amount: ' + amount + ' is not a valid amount to withdraw.';
     }
     from.balance -= amount;
     console.log(from.balance);
@@ -140,7 +163,9 @@ function withdrawFromATM(amount, from) {
             user.account.balance = from.balance;
             user.account.transactions = from.transactions;
         }
-    })
+    });
+
+    return null;
 }
 
 module.exports = acctController;

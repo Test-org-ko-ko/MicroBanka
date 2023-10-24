@@ -1,6 +1,10 @@
+
 window.onload =  () => {
     checkAccountDetails();
 }
+
+const LOWER_LIMIT = 100;
+
 let fromUserAccount;
 async function checkAccountDetails(){
     let setting = {
@@ -20,8 +24,10 @@ async function checkAccountDetails(){
         console.log('current account retrieval failed.');
     }
 
-    for(let e of fromUserAccount.account.transactions){
-        addRowToTable(e.id,e.date,e.from,e.to,e.type,e.amount);
+    for(let e of fromUserAccount.transactions){
+        const from = (e.from) ? e.from : 'N/A';
+        const to = (e.to) ? e.to : 'N/A';
+        addRowToTable(e.id, e.date, from, to, e.type, e.amount);
     }
 }
 
@@ -42,17 +48,23 @@ document.getElementById('btnSave').addEventListener("click", () =>{
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const addressData = document.getElementsByName('address');
-        let address = [];
-        addressData.forEach(data => { 
-            address.push(data.value);
-        });
-        address = address.join(', ');
-       let obj ={
-            email,
-            phone,
-            address
-       };
-       updateProfileDetails(obj);
+    let address = [];
+    addressData.forEach(data => { 
+        console.log(data);
+        address.push(data.value);
+    });
+    address = address.join(', ');
+    let obj ={
+        email,
+        phone,
+        address
+    };
+
+    if (!validateIfEmpty(obj)) {
+        alert('All fields are required to update profile.');
+        return;
+    }
+    updateProfileDetails(obj);
 });
 
 async function updateProfileDetails(updateData){
@@ -76,14 +88,30 @@ async function withdrawMoney(amount){
         method:'POST', 
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     });
-    if(response.ok){
+    if (response.ok) {
+        let msg = await response.json();
+        alert(msg.message);
+    }
+    else {
         checkAccountDetails();
         let msg = await response.json();
     }
     document.getElementById('remoteclose').click();
 }
 document.getElementById('btnWithdrawSave').addEventListener("click",() =>{
-    const amount = document.getElementById("amount").value;
+    let amount = document.getElementById("amount").value;
+    if (!validateIfEmpty({ amount })) {
+        alert('All fields are required to withdraw money.');
+        return;
+    }
+
+    if (LOWER_LIMIT > fromUserAccount.balance - amount) {
+        const isConfirmed = confirm('Overdraft Warning: You will be charged 5 USD if you wish to continue this transaction.');
+        if (isConfirmed)
+            amount = Number(amount) + 5;
+        else 
+            return;
+    }
     withdrawMoney(amount);
 });
 const transferModal = new bootstrap.Modal(document.getElementById('updateModal'));
@@ -118,8 +146,21 @@ async function deleteAcct(id){
 }
 document.getElementById('btnTransferSave').addEventListener('click', () => {
     const receipient = document.getElementById('receipient').value;
-    const amount = parseFloat(document.getElementById('transferamount').value);
-    transferAction(receipient, amount);
+    let amount = parseFloat(document.getElementById('transferamount').value);
+    let amountToDebit = amount;
+    if (!validateIfEmpty({ receipient, amount })) {
+        alert('All fields are required to make a transfer.');
+        return;
+    }
+    if (LOWER_LIMIT > fromUserAccount.balance - amount) {
+        const isConfirmed = confirm('Overdraft Warning: You will be charged 5 USD if you wish to continue this transaction.');
+        if (isConfirmed)
+            amount += 5;
+        else 
+            return;
+    }
+    transferAction(receipient, amount, amountToDebit);
+    console.log('transfer ends..');
 });
 
 async function transferAction(receipient, amount) {
@@ -138,7 +179,8 @@ async function transferAction(receipient, amount) {
     const obj = { 
         fromAcctNumber: fromUserAccount.accountNumber,
         toAcctNumber: receipient, 
-        amount: amount
+        amount: amount,
+        amountToDebit
     };
     const setting = {
         method: 'POST',
@@ -156,7 +198,8 @@ async function transferAction(receipient, amount) {
         console.log(successMsg);
     }
     else {
-        alert('Transfer failed, ' + response.status);
+        const { message } = await response.json();
+        alert('Transfer failed, ' + response.status + ', ' + message);
     }
     document.getElementById('transferclose').click();
 }
@@ -170,4 +213,17 @@ function displayAccountQRCode(accountNumber) {
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
+}
+
+document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    document.getElementById('backToHome').click();
+});
+
+function validateIfEmpty(obj) {
+    if (obj) {
+        for (let data of Object.values(obj))
+            if (!data) return false;
+    }
+    return true;
 }

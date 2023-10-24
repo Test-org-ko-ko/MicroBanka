@@ -11,23 +11,23 @@
     <link rel="stylesheet" href="../css/frontend.css">
 </head>
 <body>
-    <div class="container">
-    <h3>User Account Information Details</h3>
-        <div id="userData">
-            <div class="mb-3">
-                <label for="accountnumber" class="form-label">Account Number</label>
-                <input type="text" class="form-control" id="accountnumber" disabled>
-            </div>
-            <div class="mb-3">
-                <label for="balance" class="form-label">Balance</label>
-                <input type="text" class="form-control" id="balance" disabled>
-            </div>
-            <div class="mb-3">
-                <label for="type" class="form-label">Account Type</label>
-                <input type="text" class="form-control" id="type" disabled>
-            </div>
+    <div class="container mt-4">
+      <h3>User Account Information Details</h3>
+      <div id="userData">
+        <div class="mb-3">
+            <label for="accountnumber" class="form-label">Account Number</label>
+            <input type="text" class="form-control" id="accountnumber" disabled>
         </div>
-        <div id="qrDiv">
+        <div class="mb-3">
+            <label for="balance" class="form-label">Balance</label>
+            <input type="text" class="form-control" id="balance" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Account Type</label>
+            <input type="text" class="form-control" id="type" disabled>
+        </div>
+      </div>
+    <div id="qrDiv">
 
         </div>
         <div class="mt-4">
@@ -49,7 +49,6 @@
             <button type="button" class="btn btn-primary" id="btnTransfer" data-bs-toggle="modal" data-bs-target="#transferModal" data-bs-whatever="@mdo">Transfer</button>
             <button type="button" class="btn btn-primary" id="btnUpdate" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@mdo">Update</button>
             <button type="button" class="btn btn-primary" id="btnWithdraw" data-bs-toggle="modal" data-bs-target="#withdrawDialog" data-bs-whatever="@mdo">Withdraw</button>
-            <button type="button" class="btn btn-primary"  id="btnDelete" data-bs-toggle="modal" data-bs-target="#deleteDialog" data-bs-whatever="@mdo">Delete Account</button>
         </div>
         <!--Transfer Modal-->
         <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
@@ -72,7 +71,7 @@
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" id="transferclose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="button" class="btn btn-primary" id="btnTransferSave">Save</button>
                 </div>
               </div>
@@ -87,7 +86,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <!-- <form> -->
+                  <form>
                     <div class="mb-3">
                       <label for="email" class="col-form-label">Email</label>
                       <input type="email" class="form-control" id="email">
@@ -98,21 +97,21 @@
                       </div>
                     <div class="mb-3">
                         <label for="inputAddress" class="form-label">Street</label>
-                        <input type="text" class="form-control" id="addr1" name="address">
+                        <input type="text" class="form-control" id="inputAddress" name="address">
                     </div>
                     <div class="mb-3">
                         <label for="inputCity" class="form-label">City</label>
-                        <input type="text" class="form-control" id="addr2" name="address">
+                        <input type="text" class="form-control" id="inputCity" name="address">
                     </div>
                     <div class="mb-3">
                         <label for="inputPostalCode" class="form-label">Postal Code</label>
-                        <input type="text" class="form-control" id="addr3" name="address">
+                        <input type="text" class="form-control" id="inputPostalCode" name="address">
                     </div>
                     <div class="mb-3">
                         <label for="inputState" class="form-label">State</label>
-                        <input type="text" class="form-control" id="addr4" name="address">
+                        <input type="text" class="form-control" id="inputState" name="address">
                     </div>
-                  <!-- </form> -->
+                  </form>
                 </div>
                 <div class="modal-footer">
                   <button type="button" id="close" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -138,34 +137,13 @@
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" id="remoteclose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" id="transferclose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="button" class="btn btn-primary" id="btnWithdrawSave">Save</button>
                 </div>
               </div>
             </div>
           </div>
-           <!--delete dialog-->
-           <div class="modal fade" id="deleteDialog" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="deleteModalLabel">Withdraw</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="mb-3">
-                      <label for="warning" class="col-form-label">Are you sure to proceed to delete the account?</label>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" id="deleteClose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="btnDeleteSave">Proceed</button>
-                </div>
-              </div>
-            </div>
-          </div>
+      </form>
     
 </div>
 <!-- <a href="./transfer.html">Transfer</a> -->

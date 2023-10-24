@@ -1,9 +1,14 @@
+
 window.onload = () => {
 };
 
 document.getElementById('btnLogin').addEventListener('click', async () => {
     const name = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    if (!validateIfEmpty(name, password)) {
+        alert('All fields are required to log in.');
+        return;
+    }
     loginAction(name,password);
 });
 document.getElementById('btnSignup').addEventListener('click', () => {
@@ -13,10 +18,14 @@ document.getElementById('changepassword').addEventListener('click', () => {
     window.location.href = 'changepassword.html';
 });
 
+document.getElementById('btnChangePassword').addEventListener('click', () => {
+    window.location.href = 'changepassword.html';
+});
+
 async function loginAction(username, password) {
     const setting = {
         method: 'POST',
-        headers: { 'Authorization': 'Bearer ' }
+        headers: { 'Authorization': 'Bearer login' }
     };
     const response = await fetch('http://localhost:3000/login/'+ username  + "/" + password, setting);
     if (response.ok) {
@@ -48,3 +57,10 @@ function saveTokenInLocalStorage(token) {
     console.log(localStorage.getItem('token'));
 }
 
+function validateIfEmpty() {
+    if (arguments) {
+        for (let data of arguments)
+            if (!data) return false;
+    }
+    return true;
+}

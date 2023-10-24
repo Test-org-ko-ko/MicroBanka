@@ -13,8 +13,9 @@ app.use(express.static('./resource'));
 
 app.use('/', (req, res, next) => {
     console.log('in auth middleware');
-    if (req.headers && req.headers.authorization) {
-        console.log('has token', req.headers.authorization);
+    if (req.headers.authorization 
+            && 'null' !== req.headers.authorization.split(' ')[1]) {
+        console.log('has token:', req.headers.authorization);
         next();
     }
     else
