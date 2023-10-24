@@ -1,41 +1,40 @@
 window.onload =  () => {
     checkAccountDetails();
 }
-
+let fromUserAccount;
 async function checkAccountDetails(){
-    let fromUserAccount;
     let setting = {
         method: 'GET',
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     }
-    const responseFromAcc =  await fetch('http://localhost:3000/currentaccount', setting);
-    console.log(responseFromAcc);
+    const responseFromAcc =  await fetch('http://localhost:3000/currentuser', setting);
     if (responseFromAcc.ok) {
         fromUserAccount = await responseFromAcc.json();
         console.log(fromUserAccount);
-        document.getElementById('accountnumber').value = fromUserAccount.accountNumber;
-        document.getElementById('balance').value = fromUserAccount.balance;
-        document.getElementById('type').value = fromUserAccount.accountType;
-        displayAccountQRCode(fromUserAccount.accountNumber);
+        document.getElementById('accountnumber').value = fromUserAccount.account.accountNumber;
+        document.getElementById('balance').value = fromUserAccount.account.balance;
+        document.getElementById('type').value = fromUserAccount.account.accountType;
+        displayAccountQRCode(fromUserAccount.account.accountNumber);
     }
     else {
         console.log('current account retrieval failed.');
     }
 
-    for(let e of fromUserAccount.transactions){
-        addRowToTable(e.id, e.date, e.from, e.to, e.type, e.amount);
+    for(let e of fromUserAccount.account.transactions){
+        addRowToTable(e.id,e.date,e.from,e.to,e.type,e.amount);
     }
 }
-
 
 function addRowToTable(id) {
     let row = document.createElement('tr');
     row.setAttribute("id", id);
     for (let e of arguments) {
         let cell = document.createElement('td');
+        console.log(e);
         cell.appendChild(document.createTextNode(e));
         row.appendChild(cell);
     }
+    
     document.getElementById('tbodyTransactionsList').appendChild(row);
 }
 
@@ -45,7 +44,6 @@ document.getElementById('btnSave').addEventListener("click", () =>{
     const addressData = document.getElementsByName('address');
         let address = [];
         addressData.forEach(data => { 
-            console.log(data);
             address.push(data.value);
         });
         address = address.join(', ');
@@ -70,7 +68,6 @@ async function updateProfileDetails(updateData){
     if(response.ok){
         let updatedUser = await response.json();
         document.getElementById('close').click();
-        alert('Closed');
     }
 }
 async function withdrawMoney(amount){
@@ -80,35 +77,52 @@ async function withdrawMoney(amount){
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     });
     if(response.ok){
+        checkAccountDetails();
         let msg = await response.json();
-        alert(msg.message);
     }
+    document.getElementById('remoteclose').click();
 }
 document.getElementById('btnWithdrawSave').addEventListener("click",() =>{
     const amount = document.getElementById("amount").value;
     withdrawMoney(amount);
 });
 const transferModal = new bootstrap.Modal(document.getElementById('updateModal'));
-// Add an event listener for the "show.bs.modal" event
 transferModal._element.addEventListener('show.bs.modal', function(event) {
-    document.getElementById('email').value;
-    document.getElementById('phone').value;
-    document.getElementById('inputAddress').value;
-    document.getElementById('inputCity').value;
-    document.getElementById('inputPostalCode').value;
-    document.getElementById('inputState').value;
+    document.getElementById('email').value = fromUserAccount.email;
+    document.getElementById('phone').value = fromUserAccount.phone;
+    let address = fromUserAccount.address.split(",");
+    address.forEach((value, index) => {
+        const inputElement = document.getElementById('addr' + (index + 1)); 
+        if (inputElement) {
+            inputElement.value = value;
+        }
+    });
 });
+document.getElementById('btnDeleteSave').addEventListener('click',()=>{
+    deleteAcct(fromUserAccount.id);
+});
+async function deleteAcct(id){
+    const response = await fetch('http://localhost:3000/delete/'+ id, 
+    { 
+        method: 'DELETE', 
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
+    if(response.ok){
+        let deleted = await response.json();
+        alert('Deleted User Account!')
+    }
+    else{
+        alert('User id not existed!');
+    }
+    window.location.href = 'home.html';
+}
 document.getElementById('btnTransferSave').addEventListener('click', () => {
-    console.log('transfer starts..');
-    
     const receipient = document.getElementById('receipient').value;
     const amount = parseFloat(document.getElementById('transferamount').value);
     transferAction(receipient, amount);
-    console.log('transfer ends..');
 });
 
 async function transferAction(receipient, amount) {
-    console.log('transfer Action starts..');
     let fromUserAccount;
     const responseFromAcc = await fetch('http://localhost:3000/currentaccount', 
     { 
@@ -117,7 +131,6 @@ async function transferAction(receipient, amount) {
     });
     if (responseFromAcc.ok) {
         fromUserAccount = await responseFromAcc.json();
-        console.log(fromUserAccount);
     }
     else {
         console.log('current account retrieval failed.');
@@ -127,7 +140,6 @@ async function transferAction(receipient, amount) {
         toAcctNumber: receipient, 
         amount: amount
     };
-    console.log(obj);
     const setting = {
         method: 'POST',
         body: JSON.stringify(obj),
@@ -140,48 +152,14 @@ async function transferAction(receipient, amount) {
     const response = await fetch('http://localhost:3000/transfer', setting);
     if (response.ok) {
         const successMsg = await response.json();
+        checkAccountDetails();
         console.log(successMsg);
-        alert(successMsg);
     }
     else {
         alert('Transfer failed, ' + response.status);
     }
-    console.log('transfer ends..');
     document.getElementById('transferclose').click();
 }
-// document.getElementById('btnDownloadPDF').addEventListener('click', () => {
-//     // Initialize jsPDF
-//     const doc = new jsPDF();
-//     // Extract table data and headers
-//     const table = document.getElementById('myTable');
-//     const headers = [];
-//     const data = [];
-
-//     // Get headers
-//     for (let i = 0; i < table.rows[0].cells.length; i++) {
-//         headers[i] = table.rows[0].cells[i].textContent;
-//     }
-
-//     // Get table data
-//     for (let i = 1; i < table.rows.length; i++) {
-//         const row = table.rows[i];
-//         const rowData = [];
-//         for (let j = 0; j < row.cells.length; j++) {
-//             rowData[j] = row.cells[j].textContent;
-//         }
-//         data.push(rowData);
-//     }
-
-//     // Add data to the PDF
-//     doc.autoTable({
-//         head: [headers],
-//         body: data,
-//     });
-
-//     // Save the PDF
-//     doc.save('account_details.pdf');
-// });
-
 
 function displayAccountQRCode(accountNumber) {
     new QRCode(document.getElementById("qrDiv"), {

@@ -9,6 +9,9 @@ document.getElementById('btnLogin').addEventListener('click', async () => {
 document.getElementById('btnSignup').addEventListener('click', () => {
     window.location.href = 'register.html';
 });
+document.getElementById('changepassword').addEventListener('click', () => {
+    window.location.href = 'changepassword.html';
+});
 
 async function loginAction(username, password) {
     const setting = {
@@ -35,12 +38,8 @@ async function loginAction(username, password) {
         }
     }
     else {
-        alert('Authentication failed, ' + response.status);
         const { message } = await response.json();
-        if ('Token missing' === message) {
-            alert(message, response.status);
-            console.log(message, response.status);
-        }
+        alert(message, ', Status', response.status);
     }
 }
 

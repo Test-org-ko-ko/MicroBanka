@@ -90,11 +90,13 @@ const acctController = {
         }
     },
     getCurrentAccount: function (req, res, next) {
-        console.log('current acc in acc controller ', currentUserAccount);
         if (currentUserAccount) {
             res.status(200).json(currentUserAccount);
         }
     },
+    deleteAccount: function(req,res,next){
+
+    }
     
 }
 
@@ -103,7 +105,6 @@ function findAccountByAccountNumber(number) {
 }
 
 function transfer(amount, from, to) {
-    console.log(amount, from, to);
     if (amount <= 0 || amount > from.balance) {
         return;
     }

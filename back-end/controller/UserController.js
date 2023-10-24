@@ -15,14 +15,17 @@ const controller = {
                 currentUser.email = email;
                 currentUser.address = address;
                 currentUser.phone = phone;
-                //currentUser.securityQtn = securityQtn;
-                //currentUser.securityAns = securityAns;
                 let existingUser = User.getAll().find(data=>data.id === currentUser.id);
-                existingUser.email = currentUser.email;
-                existingUser.address = currentUser.address;
-                existingUser.phone = currentUser.phone;
-                res.status(200).json(currentUser);
-                return;
+                if(existingUser){
+                    existingUser.email = currentUser.email;
+                    existingUser.address = currentUser.address;
+                    existingUser.phone = currentUser.phone;
+                    res.status(200).json(currentUser);
+                }
+                else{
+                    res.status(400).json({message: "Bad Request, only existing user can be modified."});
+                }
+                
             }
         }
         res.status(400).json({ message: "Invalid request. Provide User data to update detail."});
@@ -37,12 +40,17 @@ const controller = {
             const { username, password } = req.params;
             console.log(username,password);
             let authenticatedUser = User.getAll().find(data => data.name.toLowerCase() === username.toLowerCase() && data.password === password);
+            console.log('existing users', User.getAll());
             if(authenticatedUser){
                 currentUser = authenticatedUser;
                 res.status(200).json({
                     accountNumber: authenticatedUser.account.accountNumber,
                     token: `${authenticatedUser.name}-${Date()}`
                 });
+                return;
+            }
+            else {
+                res.status(404).json({ message: "User not found."});
                 return;
             }
         }
@@ -72,6 +80,18 @@ const controller = {
         }
         res.status(400).json({ message: "Invalid request. Provide required data to change password."});
 
+    },
+    deleteUserAccount: function (req,res,next){
+        console.log("req params " + req.params);
+        console.log("req params id " + req.params.id);
+        if(req.params){
+            let deletedUser = User.deleteUserAccount(req.params.id);
+            console.log(deletedUser);
+            res.status(200).json({message:"Deleted user account"});
+            return;
+        }
+        res.status(400).json({message:"Bad Request: " + res.status});
+        
     }
 };
 

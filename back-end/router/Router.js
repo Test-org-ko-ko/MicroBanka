@@ -17,21 +17,12 @@ router.post('/login/:username/:password', express.urlencoded({ extended: false }
 router.get('/users', userController.getAllUsers);
 
 router.post('/transfer', express.urlencoded({ extended: true }), 
-    acctController.transfer)
-
+    acctController.transfer);
 router.get('/currentuser', userController.getCurrentUser);
-
 router.get('/currentaccount', acctController.getCurrentAccount);
-
 router.get('/findaccount/:accountNumber', acctController.findAccount);
-
 router.put('/updateprofile',express.urlencoded({ extended: true }), userController.updateProfileDetails);
-
 router.post('/withdraw/:amount',acctController.withdraw);
-
 router.post('/changepassword', userController.changePassword);
-
-//router.get('/getAuthenticatedUserAccount/:accountNumber',acctController.getAuthenticatedUserAccount);
-
-
+router.delete('/delete/:id',userController.deleteUserAccount);
 module.exports = router;
