@@ -128,8 +128,8 @@ function transfer(amount, from, amountToDebit, to) {
     from.balance -= amount;
     console.log('after ',from.balance);
     to.balance += amountToDebit;
-    Account.createTransaction.call(from, amount, TransactionType.CREDIT, from.accountNumber, to.accountNumber);
-    Account.createTransaction.call(to, amountToDebit, TransactionType.DEBIT, from.accountNumber, to.accountNumber);
+    Account.createTransaction.call(from, amount, TransactionType.DEBIT, from.accountNumber, to.accountNumber);
+    Account.createTransaction.call(to, amountToDebit, TransactionType.CREDIT, from.accountNumber, to.accountNumber);
     
     User.getAll().forEach(user => {
         if (user.account.accountNumber === from.accountNumber) {

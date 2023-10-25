@@ -3,11 +3,6 @@ const User = require("../model/User");
 let currentUser;
 
 const controller = {
-    home: function(req, res, next) {
-        const user = User.getAll().find(user => user.id === id);
-        currentUser = user;
-        // response
-    },
     updateProfileDetails: function (req, res, next) {
         if (req.body) {
             const { email, address, phone, securityQtn, securityAns } = req.body;
@@ -25,6 +20,7 @@ const controller = {
                 else{
                     res.status(400).json({message: "Bad Request, only existing user can be modified."});
                 }
+                return;
             }
         }
         res.status(400).json({ message: "Invalid request. Provide User data to update detail."});
@@ -33,8 +29,6 @@ const controller = {
         res.status(200).json(User.getAll());
     },
     getAuthenticatedUser: function (req, res, next) {
-        console.log('in usercontroler param', req.params);
-        console.log('in usercontroler body', req.body);
         if (req.params) {
             const { username, password } = req.params;
             console.log(username,password);

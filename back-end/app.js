@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.static('./resource'));
 
 app.use('/', (req, res, next) => {
-    console.log('in auth middleware');
+    console.log('Auth middleware');
     if (req.headers.authorization 
             && 'null' !== req.headers.authorization.split(' ')[1]) {
         console.log('has token:', req.headers.authorization);

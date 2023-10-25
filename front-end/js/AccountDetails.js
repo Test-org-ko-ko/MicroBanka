@@ -7,6 +7,7 @@ const LOWER_LIMIT = 100;
 
 let fromUserAccount;
 async function checkAccountDetails(){
+    console.log('token retrieved from local storage:', localStorage.getItem('token'));
     let setting = {
         method: 'GET',
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
@@ -52,7 +53,6 @@ document.getElementById('btnSave').addEventListener("click", () =>{
     const addressData = document.getElementsByName('address');
     let address = [];
     addressData.forEach(data => { 
-        console.log(data);
         address.push(data.value);
     });
     address = address.join(', ');
@@ -80,6 +80,7 @@ async function updateProfileDetails(updateData){
     };
     const response =  await fetch('http://localhost:3000/updateprofile', setting);
     if(response.ok){
+        checkAccountDetails();
         let { message } = await response.json();
         alert(message);
         document.getElementById('close').click();
@@ -233,6 +234,7 @@ async function deleteAcct(id){
     });
     if(response.ok){
         let deleted = await response.json();
+        localStorage.removeItem('token');
         alert('Deleted User Account!');
     }
     else{

@@ -1,5 +1,6 @@
 
 window.onload = () => {
+    console.log('token retrieved from local storage:',localStorage.getItem('token'));
 };
 
 document.getElementById('btnLogin').addEventListener('click', async () => {
@@ -38,7 +39,6 @@ async function loginAction(username, password) {
             });
             if (currentAcc.ok) {
                 currentAcc = await currentAcc.json();
-                console.log(currentAcc);
                 document.getElementById('landingpage').click();
             }
         }
